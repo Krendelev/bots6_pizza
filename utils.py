@@ -70,9 +70,3 @@ def cleanup_locations():
     entries = store.get_entries(slug)
     for entry in entries:
         store.delete_entry(slug, entry["id"])
-
-
-if __name__ == "__main__":
-    load_dotenv()
-
-    cleanup_locations()

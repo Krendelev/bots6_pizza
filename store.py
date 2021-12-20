@@ -50,7 +50,6 @@ def set_main_image(product_id, image_id):
         json={"data": payload},
     )
     response.raise_for_status()
-    return
 
 
 def get_products():
@@ -74,7 +73,6 @@ def get_cart(cart_id):
 def delete_cart(cart_id):
     response = requests.delete(f"{BASE_URL}/carts/{cart_id}", headers=get_headers())
     response.raise_for_status()
-    return
 
 
 def add_to_cart(cart, item_id, quantity):
@@ -84,7 +82,6 @@ def add_to_cart(cart, item_id, quantity):
         f"{BASE_URL}/carts/{cart}/items", headers=headers, json={"data": payload}
     )
     response.raise_for_status()
-    return
 
 
 def update_cart_item(cart, item_id, quantity):
@@ -95,7 +92,6 @@ def update_cart_item(cart, item_id, quantity):
         json={"data": payload},
     )
     response.raise_for_status()
-    return
 
 
 def remove_from_cart(cart, item_id):
@@ -103,7 +99,6 @@ def remove_from_cart(cart, item_id):
         f"{BASE_URL}/carts/{cart}/items/{item_id}", headers=get_headers()
     )
     response.raise_for_status()
-    return
 
 
 def get_cart_items(cart):
@@ -166,7 +161,6 @@ def create_field(field):
         f"{BASE_URL}/fields", headers=get_headers(), json={"data": payload}
     )
     response.raise_for_status()
-    return
 
 
 def create_entry(flow_slug, entry):
@@ -192,7 +186,6 @@ def update_entry(flow_slug, entry_id, field_slug, value):
         json={"data": payload},
     )
     response.raise_for_status()
-    return
 
 
 def get_entries(slug):
@@ -214,4 +207,3 @@ def delete_entry(slug, entry_id):
         f"{BASE_URL}/flows/{slug}/entries/{entry_id}", headers=get_headers()
     )
     response.raise_for_status()
-    return
