@@ -1,7 +1,6 @@
 import os
 from dataclasses import asdict
 
-from dotenv import load_dotenv
 from geopy import distance, geocoders
 
 import pizzeria
@@ -63,10 +62,3 @@ def get_delivery_info(location):
         closest_shop["address"],
         closest_shop["distance"],
     )
-
-
-def cleanup_locations():
-    slug = pizzeria.CustomerLocationFlow().slug
-    entries = store.get_entries(slug)
-    for entry in entries:
-        store.delete_entry(slug, entry["id"])
