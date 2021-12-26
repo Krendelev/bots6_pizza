@@ -5,6 +5,7 @@ import requests
 from dotenv import load_dotenv
 from flask import Flask, request
 
+import fb_ui
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -12,25 +13,39 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def verify():
-    hub = request.args.get("hub")
-    if hub.challenge and hub.mode == "subscribe":
-        if hub.verify_token != os.environ["VERIFICATION_TOKEN"]:
+    if not (args := request.args.to_dict()):
+        return "Hi there!", 200
+    if args["hub.challenge"] and args["hub.mode"] == "subscribe":
+        if args["hub.verify_token"] != os.environ["VERIFICATION_TOKEN"]:
             return "Verification token mismatch", 403
-        return hub.challenge, 200
-    return "Hello world", 200
+        return args["hub.challenge"], 200
 
 
 @app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
-    if data["object"] == "page":
-        for entry in data["entry"]:
-            for messaging_event in entry["messaging"]:
-                if messaging_event.get("message"):
-                    sender_id = messaging_event["sender"]["id"]
-                    message_text = messaging_event["message"]["text"]
-                    send_message(sender_id, message_text)
-    return "ok", 200
+    # print(data)
+    try:
+        messaging = data["entry"][0]["messaging"][0]
+        if text := messaging["message"].get("text"):
+            send_menu(messaging["sender"]["id"])
+            # send_message(messaging["sender"]["id"], text)
+    except LookupError:
+        return "Bad Request", 400
+    else:
+        return "OK", 200
+
+
+def send_menu(recipient_id):
+    url = "https://graph.facebook.com/v2.6/me/messages"
+    params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "recipient": {"id": recipient_id},
+        "message": fb_ui.make_menu()
+    }
+    response = requests.post(url, params=params, headers=headers, json=payload)
+    response.raise_for_status()
 
 
 def send_message(recipient_id, message):
