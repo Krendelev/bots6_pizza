@@ -28,6 +28,25 @@ def make_menu():
         }
         for p in get_products()
     ]
+    elements.append(
+        {
+            "title": "PIZZERIA",
+            "image_url": "https://bit.ly/3z3gr4O",
+            "subtitle": "Лучшая пицца для вас!",
+            "buttons": [
+                {
+                    "type": "postback",
+                    "title": "Корзина",
+                    "payload": "CART",
+                },
+                {
+                    "type": "postback",
+                    "title": "Оформить заказ",
+                    "payload": "CHECKOUT",
+                },
+            ],
+        }
+    )
 
     return {
         "attachment": {
