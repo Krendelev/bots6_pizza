@@ -1,5 +1,6 @@
 import os
 import time
+from dotenv.main import load_dotenv
 
 import requests
 from dotenv import dotenv_values
@@ -60,6 +61,12 @@ def get_products():
 
 def get_product(item_id):
     response = requests.get(f"{BASE_URL}/products/{item_id}", headers=get_headers())
+    response.raise_for_status()
+    return response.json()["data"]
+
+
+def get_categories():
+    response = requests.get(f"{BASE_URL}/categories", headers=get_headers())
     response.raise_for_status()
     return response.json()["data"]
 
@@ -207,3 +214,8 @@ def delete_entry(slug, entry_id):
         f"{BASE_URL}/flows/{slug}/entries/{entry_id}", headers=get_headers()
     )
     response.raise_for_status()
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    print(get_products()[0])

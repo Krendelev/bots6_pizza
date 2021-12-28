@@ -1,16 +1,10 @@
-import json
-
 from dotenv import load_dotenv
 
+import fb_utils
 import store
 
 
-def get_products():
-    with open("_workfiles/products.json") as prod:
-        return json.load(prod)[:5]
-
-
-def make_menu():
+def make_menu(category):
     elements = [
         {
             "title": f'{p["name"]} (₽{p["price"][0]["amount"]})',
@@ -19,31 +13,31 @@ def make_menu():
             ),
             "subtitle": p["description"],
             "buttons": [
-                {
-                    "type": "postback",
-                    "title": "Добавить в корзину",
-                    "payload": p["id"],
-                },
+                {"type": "postback", "title": "Добавить в корзину", "payload": p["id"]},
             ],
         }
-        for p in get_products()
+        for p in fb_utils.get_products_by_category(category)
     ]
+    elements.append(
+        {
+            "title": "Не нашли пиццу по вкусу?",
+            "image_url": "https://bit.ly/33Wecoh",
+            "subtitle": "Посмотрите в разделах ниже",
+            "buttons": [
+                {"type": "postback", "title": "Особые", "payload": "special"},
+                {"type": "postback", "title": "Сытные", "payload": "satisfying"},
+                {"type": "postback", "title": "Острые", "payload": "hot"},
+            ],
+        }
+    )
     elements.append(
         {
             "title": "PIZZERIA",
             "image_url": "https://bit.ly/3z3gr4O",
             "subtitle": "Лучшая пицца для вас!",
             "buttons": [
-                {
-                    "type": "postback",
-                    "title": "Корзина",
-                    "payload": "CART",
-                },
-                {
-                    "type": "postback",
-                    "title": "Оформить заказ",
-                    "payload": "CHECKOUT",
-                },
+                {"type": "postback", "title": "Корзина", "payload": "CART"},
+                {"type": "postback", "title": "Оформить заказ", "payload": "CHECKOUT"},
             ],
         }
     )
@@ -58,5 +52,3 @@ def make_menu():
 
 if __name__ == "__main__":
     load_dotenv()
-
-    print(make_menu())

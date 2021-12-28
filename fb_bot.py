@@ -40,10 +40,7 @@ def send_menu(recipient_id):
     url = "https://graph.facebook.com/v2.6/me/messages"
     params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
-    payload = {
-        "recipient": {"id": recipient_id},
-        "message": fb_ui.make_menu()
-    }
+    payload = {"recipient": {"id": recipient_id}, "message": fb_ui.make_menu("main")}
     response = requests.post(url, params=params, headers=headers, json=payload)
     response.raise_for_status()
 
