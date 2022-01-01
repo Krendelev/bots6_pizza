@@ -33,7 +33,7 @@ def webhook():
         if postback := messaging.get("postback"):
             handle_user_request(user_id, postback.get("payload"))
         elif messaging.get("message"):
-            menu = fb_ui.make_menu("main")
+            menu = fb_ui.make_section("main")
             send_message(user_id, menu)
     except LookupError:
         return "Bad Request", 400
@@ -46,7 +46,7 @@ def handle_user_request(user_id, request):
     # while request:
     match request.split():
         case ["MENU", page] if page in ["main", "special", "satisfying", "hot"]:
-            menu = fb_ui.make_menu(page)
+            menu = fb_ui.make_section(page)
             send_message(user_id, menu)
         case ["MENU", item]: # if item := pattern.fullmatch(request).group():
             store.add_to_cart(user_id, item, 1)

@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import fb_utils
 import store
 
-SHOP = {
+SHOP_CARD = {
     "title": "PIZZERIA",
     "image_url": "https://bit.ly/3z3gr4O",
     "subtitle": "Лучшая пицца для вас!",
@@ -12,7 +12,7 @@ SHOP = {
         {"type": "postback", "title": "Оформить заказ", "payload": "CHECKOUT"},
     ],
 }
-CATEGORIES = {
+CATEGORIES_CARD = {
     "title": "Не нашли пиццу по вкусу?",
     "image_url": "https://bit.ly/33Wecoh",
     "subtitle": "Посмотрите в разделах ниже",
@@ -22,7 +22,7 @@ CATEGORIES = {
         {"type": "postback", "title": "Острые", "payload": "MENU hot"},
     ],
 }
-CART = {
+CART_CARD = {
     "title": "Корзина",
     "image_url": "https://bit.ly/3EHxxpY",
     "buttons": [
@@ -33,7 +33,7 @@ CART = {
 }
 
 
-def make_menu(category):
+def make_section(category):
     elements = []
     for p in fb_utils.get_products_by_category(category):
         image_url = store.get_file_link(p["relationships"]["main_image"]["data"]["id"])
@@ -52,8 +52,8 @@ def make_menu(category):
             }
         )
 
-    elements.append(CATEGORIES)
-    elements.append(SHOP)
+    elements.append(CATEGORIES_CARD)
+    elements.append(SHOP_CARD)
 
     return {
         "attachment": {
@@ -62,6 +62,8 @@ def make_menu(category):
         }
     }
 
+def make_menu():
+    ...
 
 def make_cart(user_id):
     cart = store.get_cart_items(user_id)
@@ -69,10 +71,10 @@ def make_cart(user_id):
         return {"text": "Ваша корзина пуста"}
 
     elements = []
-    card = CART.copy()
+    cart_card = CART_CARD.copy()
     total = cart["meta"]["display_price"]["with_tax"]["formatted"]
-    card["subtitle"] = f"Ваш заказ на сумму ₽{total}"
-    elements.append(card)
+    cart_card["subtitle"] = f"Ваш заказ на сумму ₽{total}"
+    elements.append(cart_card)
     for p in cart["data"]:
         price = p["meta"]["display_price"]["with_tax"]["unit"]["formatted"]
         val = p["meta"]["display_price"]["with_tax"]["value"]["formatted"]
