@@ -1,6 +1,5 @@
 import os
 import time
-from dotenv.main import load_dotenv
 
 import requests
 from dotenv import dotenv_values
@@ -214,8 +213,3 @@ def delete_entry(slug, entry_id):
         f"{BASE_URL}/flows/{slug}/entries/{entry_id}", headers=get_headers()
     )
     response.raise_for_status()
-
-
-if __name__ == "__main__":
-    load_dotenv()
-    print(get_products()[0])
