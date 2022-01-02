@@ -82,7 +82,7 @@ def delete_cart(cart_id):
     response.raise_for_status()
 
 
-def add_to_cart(cart, item_id, quantity):
+def add_to_cart(cart, item_id, quantity=1):
     headers = {**get_headers(), "X-MOLTIN-CURRENCY": "RUB"}
     payload = {"id": item_id, "type": "cart_item", "quantity": int(quantity)}
     response = requests.post(

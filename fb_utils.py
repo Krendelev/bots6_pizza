@@ -1,25 +1,35 @@
 import json
+import os
 
-from dotenv import load_dotenv
+import redis
+import requests
 
 import store
 
+db = redis.Redis(
+    host=os.getenv("REDIS_ENDPOINT"),
+    port=os.getenv("REDIS_PORT"),
+    password=os.getenv("REDIS_PASSWORD"),
+)
 
-def get_products():
-    with open("_workfiles/products.json") as prod:
-        return json.load(prod)
 
-
-def get_products_by_category(category_slug):
-    products = get_products()
+def get_products_by_category(category):
+    products = store.get_products()
     product_ids_by_category = {
         c["slug"]: [p["id"] for p in c["relationships"]["products"]["data"]]
         for c in store.get_categories()
     }
-    return [p for p in products if p["id"] in product_ids_by_category[category_slug]]
+    return [p for p in products if p["id"] in product_ids_by_category[category]]
 
 
-if __name__ == "__main__":
-    load_dotenv()
+def get_page(category):
+    return json.loads(db.hget("menu", category).decode())
 
-    print(get_products_by_category("main"))
+
+def send_message(user_id, message):
+    url = "https://graph.facebook.com/v2.6/me/messages"
+    params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
+    headers = {"Content-Type": "application/json"}
+    payload = {"recipient": {"id": user_id}, "message": message}
+    response = requests.post(url, params=params, headers=headers, json=payload)
+    response.raise_for_status()
