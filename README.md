@@ -15,10 +15,16 @@ $ python3 -m pip install -r requirements.txt
 $ python3 setup.py
 ```
 
-Запустите программу.
+Запустите бота в Telegram.
 ```bash
 $ python3 main.py
 ```
+И в Фейсбук.
+```bash
+$ python3 create_menu.py
+$ python3 fb_bot.py
+```
+Для отслеживания обновлений меню в Фейсбук настройте запуск `create_menu.py` с помощью `cron`.
 
 ## Настройки и переменные окружения
 
