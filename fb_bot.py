@@ -14,13 +14,12 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def verify():
-    if not (args := request.args.to_dict()):
-        return "Nothing to see here", 200
-    if args["hub.challenge"] and args["hub.mode"] == "subscribe":
+    args = request.args.to_dict()
+    if args.get("hub.challenge") and args.get("hub.mode") == "subscribe":
         if args["hub.verify_token"] != os.environ["VERIFICATION_TOKEN"]:
             return "Verification token mismatch", 403
         return args["hub.challenge"], 200
-
+    return "Nothing to see here", 200
 
 @app.route("/", methods=["POST"])
 def webhook():
