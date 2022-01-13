@@ -2,7 +2,7 @@ import json
 
 import fb_utils
 import store
-from fb_ui_data import CATEGORIES, CATEGORIES_CARD, SHOP_CARD, cart_card
+from fb_ui_data import CATEGORIES, CATEGORIES_CARD, SHOP_CARD, CART_CARD
 
 
 def make_page(category):
@@ -46,7 +46,7 @@ def make_cart(user_id):
         return {"text": "Ваша корзина пуста"}
 
     total = cart["meta"]["display_price"]["with_tax"]["formatted"]
-    cart_card["subtitle"] = f"Ваш заказ на сумму ₽{total}"
+    CART_CARD["subtitle"] = f"Ваш заказ на сумму ₽{total}"
 
     elements = [
         {
@@ -68,7 +68,7 @@ def make_cart(user_id):
         }
         for p in cart["data"]
     ]
-    return compose_message(cart_card, *elements)
+    return compose_message(CART_CARD, *elements)
 
 
 def compose_message(*elements):

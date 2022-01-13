@@ -21,6 +21,7 @@ def verify():
         return args["hub.challenge"], 200
     return "Nothing to see here", 200
 
+
 @app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
@@ -30,18 +31,18 @@ def webhook():
         if postback := messaging.get("postback"):
             handle_user_request(user_id, postback.get("payload"))
         elif messaging.get("message"):
-            page = fb_utils.get_page("main")
+            page = fb_utils.get_menu_page("main")
             fb_utils.send_message(user_id, page)
     except LookupError:
         return "Bad Request", 400
-    else:
-        return "OK", 200
+    
+    return "OK", 200
 
 
 def handle_user_request(user_id, request):
     match request.split("+"):
         case ["MENU", category]:
-            page = fb_utils.get_page(category)
+            page = fb_utils.get_menu_page(category)
             fb_utils.send_message(user_id, page)
 
         case ["MENU", item_name, item_id]:

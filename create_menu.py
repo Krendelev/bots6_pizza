@@ -9,6 +9,12 @@ import fb_ui
 
 
 def main():
+    load_dotenv()
+    db = redis.Redis(
+        host=os.getenv("REDIS_ENDPOINT"),
+        port=os.getenv("REDIS_PORT"),
+        password=os.getenv("REDIS_PASSWORD"),
+    )
     products = store.get_products()
     new_hash = hashlib.md5(str(products).encode()).hexdigest()
     if new_hash != db.hget("menu", "hash").decode():
@@ -16,11 +22,4 @@ def main():
 
 
 if __name__ == "__main__":
-    load_dotenv()
-
-    db = redis.Redis(
-        host=os.getenv("REDIS_ENDPOINT"),
-        port=os.getenv("REDIS_PORT"),
-        password=os.getenv("REDIS_PASSWORD"),
-    )
     main()

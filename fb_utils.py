@@ -22,7 +22,7 @@ def get_products_by_category(category):
     return [p for p in products if p["id"] in product_ids_by_category[category]]
 
 
-def get_page(category):
+def get_menu_page(category):
     return json.loads(db.hget("menu", category).decode())
 
 

@@ -19,7 +19,7 @@ CATEGORIES_CARD = {
         {"type": "postback", "title": "Острые", "payload": "MENU+hot"},
     ],
 }
-cart_card = {
+CART_CARD = {
     "title": "Корзина",
     "image_url": "https://bit.ly/3EHxxpY",
     "buttons": [
