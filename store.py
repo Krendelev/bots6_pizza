@@ -64,6 +64,12 @@ def get_product(item_id):
     return response.json()["data"]
 
 
+def get_categories():
+    response = requests.get(f"{BASE_URL}/categories", headers=get_headers())
+    response.raise_for_status()
+    return response.json()["data"]
+
+
 def get_cart(cart_id):
     response = requests.get(f"{BASE_URL}/carts/{cart_id}", headers=get_headers())
     response.raise_for_status()
@@ -75,7 +81,7 @@ def delete_cart(cart_id):
     response.raise_for_status()
 
 
-def add_to_cart(cart, item_id, quantity):
+def add_to_cart(cart, item_id, quantity=1):
     headers = {**get_headers(), "X-MOLTIN-CURRENCY": "RUB"}
     payload = {"id": item_id, "type": "cart_item", "quantity": int(quantity)}
     response = requests.post(
